@@ -66,9 +66,9 @@ const file = "prueba.txt"
 console.log("////////////////////EXTRA///////////////////////")
 
 const fichero = 'extra.txt'
-fs.writeFile(fichero, "", (err) => {
-    if (err) throw "Error creando el fichero"
-})
+// fs.writeFile(fichero, "", (err) => {
+//     if (err) throw "Error creando el fichero"
+// })
 
 async function ventas() {
 
@@ -92,51 +92,74 @@ async function ventas() {
                 break
             default:
                 console.log("opcion no valida")
-                break
+                ventas()
+
         }
     })
 }
 
 async function add() {
-    try{
-    rl.question("que prodcuto quieres añadir? ", async (names) => {
-        rl.question("Cuantos de estos vendiste? ", async (sales) => {
-            rl.question("Cuanto cuesta cada uno? ", async (price) => {
-                fs.appendFile(fichero, `NOMBRE DEL PRODUCTO: ${names} | CUANTOS VENDIDOS: ${sales} | CUANTO CUESTA CADA UNO: ${price}\n`,(err) => {
-                    if (err) throw "Error agregando producto"
+    try {
+        rl.question("que prodcuto quieres añadir? ", (names) => {
+            rl.question("Cuantos de estos vendiste? ", (sales) => {
+                rl.question("Cuanto cuesta cada uno? ", (price) => {
+                    fs.appendFile(fichero, `NOMBRE DEL PRODUCTO: ${names} | CUANTOS VENDIDOS: ${sales} | CUANTO CUESTA CADA UNO: ${price}\n`, (err) => {
+                        if (err) throw "Error agregando producto" 
+                    })
+                    ventas()
                 })
-                await query()
-                await ventas()
             })
         })
-    })
-    }catch(err){
+    } catch (err) {
         console.log("Hubo un error agregando el archivo ", err)
     }
 }
 
-async function query(){
-    try{
-        console.log(fs.readFileSync(fichero, 'utf8'))
+async function query() {
+    try {
+        console.log(fs.readFileSync(fichero, 'utf8', ))
         ventas()
-    }catch(err){
-        console.log("Ocurrio un error leyendo el archivo" + err.message)
+    } catch (err) {
+        console.log("Ocurrio un error leyendo el archivo " + err.message)
     }
 }
 
-async function update(){
-    try{
-    rl.question("cual producto quieres actualizar: ", (producto) => {
-        fs.readFileSync(fichero, 'utf8', (err, data) => {
-            if(err) throw "Algo salio mal al leer el documento"
-            const lines = data.split('\n')
+async function update() {
+    try {
+        rl.question("cual producto quieres actualizar: ", (producto) => {
+            rl.question("Nuevo nombre: ", (newName) => {
+                rl.question("Nuevas ventas: ", (newSales) => {
+                    rl.question("Nuevo precio: ", (newPrice) => {
+                        fs.readFile(fichero, 'utf8', (err, data) => {
+                            if (err) throw "Algo salio mal al leer el documento"
+                            const lines = data.split('\n')
+                            let word = 0
 
-            
+                            for (let i of lines) {
+                                word = i.split(' ')
+                                if (word[3] === producto) {
 
+                                    const index = lines.indexOf(i)
+                                    lines[index] = `NOMBRE DEL PRODUCTO: ${newName} | CUANTOS VENDIDOS: ${newSales} | CUANTO CUESTA CADA UNO: ${newPrice}\n`
+                                    let news = lines.join('\n')
+
+                                    fs.writeFileSync(fichero, news)
+                                    console.log("Actualizado con exito")
+                                    ventas()
+
+                                    break
+                                } else {
+                                    continue
+                                }
+                            }
+                        })
+                    })
+
+                })
+            })
         })
-    })
-    }catch(error){
-        console.log("Error durante el proceso de actualizacion: ",error.message)
+    } catch (error) {
+        console.log("Error durante el proceso de actualizacion: ", error.message)
     }
 }
 
