@@ -1,23 +1,104 @@
 const fs = require("fs")
 
 const fichero = "json.json"
+const ficheroxml = "xml.xml"
+
 const obj = {
     name: "Erick",
-    edad: 23,
+    age: 23,
     birthday: "9 de octubre",
     languages: ["javascript", "python", "php"]
 }
 //TRANSFORMAMOS EL OBJETO "OBJ" A UNA SINTAXIS QUE ENTIENDA EL FORMATO .JSON
 let data = JSON.stringify(obj, null, 2)
+
 //CREAMOS EL JSON QUE LLEVA LA INFORMACION DE DATA
 fs.writeFileSync(fichero, data)
-
 //LEEMOS EL FICHERO .JSON
 let read = fs.readFileSync(fichero)
 //LOS DATOS QUE EXTRAGIMOS DE LA FUNCION READ LOS TRANSFORMAMOS EN UNA SINTAXIS LEGIBLE
 let object = JSON.parse(read)
 console.log(object)
 
+//OTRA FORMA DE LEER EL FICHERO .JSON
+let req = require(`./${fichero}`)
+console.log(req)
+
 //BORRAMOS EL ARCHIVO .JSON
 fs.unlinkSync(fichero)
 
+//////////////////XML////////////////////
+
+//CREAMOS UN OBJETO XML
+const dataxml = `
+<name>${obj.name}</name>
+<age>${obj.age}</age>
+<date>${obj.birthday}</date>
+<languages>
+${
+    obj.languages.map(language => `\t<item>${language}</item>`).join('\n')
+}
+</languages>
+`
+
+//CREAMOS EL FICHERO XML
+fs.writeFileSync(ficheroxml, dataxml)
+//LEEMOS EL ARCHIVO.XML
+const readxml = fs.readFileSync(ficheroxml, 'utf8')
+console.log(readxml)
+
+//BORRAMOS EL ARCHIVO XML
+fs.unlinkSync(ficheroxml)
+
+//EXTRA
+console.log("//////////////EXTRA////////////////////")
+
+const pro_json = "programador.json"
+const pro_xml = "programador.xml"
+const objeto = {
+    name: "johnny",
+    age: "23",
+    birthday: "20 de abril",
+    languages: ['python', 'php', 'javascript']
+}
+class Persona {
+    constructor(name, age, birthday, languages){
+        this.name = name
+        this.age = age
+        this.birthday = birthday
+        this.languages = languages
+    }
+}
+
+//JSON
+const objeto_j = JSON.stringify(objeto)
+fs.writeFileSync(pro_json, objeto_j)
+
+const data_json = fs.readFileSync(pro_json)
+const objeto_json = JSON.parse(data_json)
+
+const programmer = new Persona(objeto_json.name, objeto_json.age, objeto_json.birthday, objeto.languages)
+console.log(programmer)
+fs.unlinkSync(pro_json)
+
+//XML
+const eti = Object.keys(objeto)
+const objeto_x = `
+<${eti[0]}> ${objeto.name} </${eti[0]}>
+<${eti[1]}> ${objeto.age} </${eti[1]}>
+<${eti[2]}> ${objeto.birthday} </${eti[2]}>
+<${eti[3]}> 
+${
+    objeto.languages.map(language => `\t<item> ${language} </item>`).join('\n')
+} 
+</${eti[3]}>
+`
+
+fs.writeFileSync(pro_xml, objeto_x)
+const data_xml = fs.readFileSync(pro_xml, 'utf8')
+
+console.log(data_xml)
+
+
+const programmer2 = new Persona(data_xml.name, data_xml.age, data_xml.birthday, data_xml.languages)
+console.log(programmer2)
