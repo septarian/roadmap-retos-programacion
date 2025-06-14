@@ -1,4 +1,5 @@
 const fs = require("fs")
+const xml2js = require("xml2js")
 
 const fichero = "json.json"
 const ficheroxml = "xml.xml"
@@ -54,13 +55,13 @@ fs.unlinkSync(ficheroxml)
 console.log("//////////////EXTRA////////////////////")
 
 const pro_json = "programador.json"
-const pro_xml = "programador.xml"
 const objeto = {
     name: "johnny",
     age: "23",
     birthday: "20 de abril",
     languages: ['python', 'php', 'javascript']
 }
+
 class Persona {
     constructor(name, age, birthday, languages){
         this.name = name
@@ -82,23 +83,42 @@ console.log(programmer)
 fs.unlinkSync(pro_json)
 
 //XML
+const pro_xml = "programador.xml"
 const eti = Object.keys(objeto)
 const objeto_x = `
-<${eti[0]}> ${objeto.name} </${eti[0]}>
-<${eti[1]}> ${objeto.age} </${eti[1]}>
-<${eti[2]}> ${objeto.birthday} </${eti[2]}>
+<root>
+<${eti[0]}>${objeto.name}</${eti[0]}>
+<${eti[1]}>${objeto.age}</${eti[1]}>
+<${eti[2]}>${objeto.birthday}</${eti[2]}>
 <${eti[3]}> 
 ${
-    objeto.languages.map(language => `\t<item> ${language} </item>`).join('\n')
+    objeto.languages.map(language => `\t<item>${language}</item>`).join('\n')
 } 
 </${eti[3]}>
+</root>
 `
-
+//Se crea el archivo
 fs.writeFileSync(pro_xml, objeto_x)
+//Leer y parsear XML
 const data_xml = fs.readFileSync(pro_xml, 'utf8')
+const parser = new xml2js.Parser()
 
-console.log(data_xml)
 
+parser.parseString(data_xml, (err, result) => {
+  if (err) {
+    console.error("Error al parsear XML:", err);
+    return;
+  }
 
-const programmer2 = new Persona(data_xml.name, data_xml.age, data_xml.birthday, data_xml.languages)
-console.log(programmer2)
+  // Acceder a los datos convertidos
+  const datos = result.root;
+  const nombre = datos[eti[0]][0];
+  const edad = datos[eti[1]][0];
+  const cumple = datos[eti[2]][0];
+  const lenguajes = datos[eti[3]][0].item;
+
+  const programmer2 = new Persona(nombre, edad, cumple, lenguajes);
+  console.log(programmer2);
+});
+
+fs.unlinkSync(pro_xml)
