@@ -28,14 +28,36 @@ const b = 5
 console.log(suma(a, b))
 
 function describe(){
-
     //Testeamos la funcion usando Jest
     test("suma de numeros 5 + 10 deberia ser 15", () => {
         expect(suma(10,5)).toBe(15)
     })
-    test("Lnza error si se pasan strings", () => {
+    test("suma de numeros -5 + -10 deberia ser 15", () => {
+        expect(suma(-10,-5)).toBe(-15)
+    })
+    test("Lanza error si se pasan strings", () => {
         expect(() => suma("10","5").toThrow("Deben ser numeros "))
     })
 }
+//describe()
 
-describe()
+//EXTRA
+
+
+function tested(){
+    const arr = {
+        name: "Erick",
+        age: 23,
+        birth_date: `09/10/2001`,
+        programming_languages: ["javascript", "php", "python"],
+    }
+
+    test("Debe tener todos los campos", () => {
+        expect(arr).toHaveProperty("name")
+        expect(arr).toHaveProperty("age")
+        expect(arr).toHaveProperty("birth_date")
+        expect(arr).toHaveProperty("programming_languages")
+    })
+}
+
+tested()
