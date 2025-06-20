@@ -42,8 +42,6 @@ function describe(){
 //describe()
 
 //EXTRA
-
-
 function tested(){
     const arr = {
         name: "Erick",
@@ -58,6 +56,19 @@ function tested(){
         expect(arr).toHaveProperty("birth_date")
         expect(arr).toHaveProperty("programming_languages")
     })
+    test("Deben tener la informacion correcta", () => {
+        expect(typeof arr.name).toBe('string')
+        expect(typeof arr.age).toBe('number')
+        expect(typeof arr.birth_date).toBe('string')
+        expect(typeof arr.programming_languages).toBe('object')
+    })
+    test("No debe estar vacio", () => {
+        expect(arr.name.length).toBeGreaterThan(0)
+        expect(arr).not.toBeNull()
+        expect(arr).not.toBeNaN()
+        expect(arr).not.toBeUndefined()
+        expect(arr.birth_date.length).toBeGreaterThan(0)
+        expect(arr.programming_languages.length).toBeGreaterThan(0)
+    })
 }
-
 tested()
