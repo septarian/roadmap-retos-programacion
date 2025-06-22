@@ -14,3 +14,5 @@ pubspec.lock
 *.class
 *.gradle 
 node_modules/
+package.json/
+package-lock.json/
