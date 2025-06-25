@@ -24,11 +24,11 @@ console.log(regular)
 //let regex_email = new RegExp("@")
 let regex_email = /^\D+@\w+\.[a-zA-z]+$/
 let regex_phone = /\b\d{10}\b/
-let regex_url = /^htt\D+:\/\/./
+let regex_url = /^https?:\/\/./
 
 let email = "erickf.mora@gmail.com"
 let phone = "3321904500"
-let url = "http://retosdeprogramacion.com/roadmap"
+let url = "https://retosdeprogramacion.com/roadmap"
 
 //Revisa que el string email si lleve un "@"
 let res_email = regex_email.test(email)
