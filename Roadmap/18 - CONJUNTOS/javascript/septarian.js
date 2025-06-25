@@ -35,7 +35,9 @@ let extra2 = [13, 15, 16, 19, 10, "hot pants"];
 
 //union
 let extraus = extra.concat(extra2);
-console.log(extraus);
+//convertimos el array en un set para borrar duplicados y lo volvemos a convertir en array
+extraus_prime = [...new Set(extraus)]
+console.log(extraus_prime);
 
 //interseccion
 let interseccion = [];
