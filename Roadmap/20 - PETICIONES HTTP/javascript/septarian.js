@@ -1,4 +1,10 @@
 //peticiones http
+const readline = require('readline')
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
 
 //GET: RECUPERA DATOS
 //HEAD: UNA PETICION IDENTICA A GET, PERO SIN EL CUERPO DE LA RESPUESTA
@@ -23,16 +29,58 @@ function navegadorOnly(){
     }
 }
 //FETCH
-const url = "https://jsonplaceholder.typicode.com/users/1"
-//una manera
-// fetch(url_fetch)
-// .then((data => {return data.json()}))
-// .then((res=>{console.log(res)}))
-fetch(url, {
-    method: 'GET'
-})
-//obtiene la informacion en formato json
-.then((data) => data.json())
-//procesa la informacion
-.then(res => console.log(res.id))
-.catch((error => console.log(error)))
+function api(){
+    const url = "https://jsonplaceholder.typicode.com/users/1"
+    //una manera
+    // fetch(url_fetch)
+    // .then((data => {return data.json()}))
+    // .then((res=>{console.log(res)}))
+    fetch(url, {
+        method: 'GET'
+    })
+    //obtiene la informacion en formato json
+    .then(data => { 
+        //verifique que la peticion no tenga errores
+        if(!data.ok){
+            throw new Error("No a funcionado la peticion")
+        }
+        return data.json()
+    })
+    //procesa la informacion
+    .then(res => console.log(res.id))
+    .catch((error => console.log(error)))
+}
+
+
+//EXTRA
+function pokemon(){
+    rl.question("Que pokemon quieres buscar: ", (res) => {
+        if(res === '') throw new Error("Debes escribir un nombre")
+
+        const link = `https://pokeapi.co/api/v2/pokemon/${res}`
+        fetch(link)
+        .then(data => {
+            if(!data.ok) throw new Error("Pokemon no encontrado")
+            return data.json()
+        })
+        .then(res => {
+            console.log("Nombre:",res.name)
+            console.log("id:",res.id)
+            console.log(res.weight,"kilos")
+            console.log(res.height,"pies")
+            console.log("Lista de tipos:")
+            res.types?.map((e) => {
+                console.log(`   -Tipo: ${e.type.name}`)
+            })
+            console.log("Juegos en los que aparece:")
+            res.game_indices.map((e) => {
+                console.log(`   -Edicion: ${e.version.name}`)
+            })
+
+        })
+        .catch(error => console.log(error))
+        rl.close()
+    })
+}
+
+pokemon()
