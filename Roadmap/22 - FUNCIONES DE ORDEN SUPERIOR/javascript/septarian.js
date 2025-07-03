@@ -30,29 +30,69 @@ console.log(arr.filtrar((x) => x > 5))
 console.log("/////////////////EXTRA//////////////////////")
 
 const estudiantes = [
-    {name: 'Johnny', birth: Date('29 septiembre 1961'), qualification: [8.7, 10, 9, 7.5] },
-    {name: 'Gyro', birth: Date('01 junio 1959'), qualification: [8, 8, 6, 7] },
-    {name: 'Diego', birth: Date('17 febrero 1954'), qualification: [5, 7, 9, 8.9] },
-    {name: 'Valentine', birth: Date('12 diciembre 1950'), qualification: [10, 10, 9.3, 9.4] },
+    {name: 'Gyro', birth: new Date('01 junio 1959'), qualification: [8, 8, 6, 7] },
+    {name: 'Johnny', birth: new Date('29 septiembre 1961'), qualification: [8.7, 10, 9, 7.5] },
+    {name: 'Diego', birth: new Date('17 febrero 1954'), qualification: [5, 7, 9, 8.9] },
+    {name: 'Valentine', birth: new Date('12 december 1950'), qualification: [10, 10, 9.3, 9.4] },
 ]
+
+//funcion de elemento superior
 Array.prototype.lista = function(callback){
     const list = []
     for(i of this){
-        callback(i)
+        callback(i) ? list.push(callback(i)) : null
     }
     return list
 }
 
+//promedio
 function prom(i){
-    let cont = 0
-    i.qualification.reduce((acc, el) => {
-        acc = cont
-        cont = acc + el
+    let cont = i.qualification.reduce((acc, el) => {
+        acc = acc + el
+        return acc
     },0)
-
-    cont /= 4
-    console.log(`-${i.name} tiene promedio de ${cont}`)
+    cont = (cont / estudiantes.length).toFixed(1)
+    return {name: i.name, promedio: cont,}
 }
 
+//mejores estudiantes
+function mejor(i){
+    const estudiantes = prom(i)
+    if(estudiantes.promedio > 9){
+        return estudiantes
+    }
+}
+
+//fecha de nacimiento
+function nacimiento(){
+    const nacido = [...estudiantes]
+    nacido.sort((a,b) => b.birth - a.birth)
+    return nacido
+}
+
+function alto(i){
+    const listaPromedios = estudiantes.map(e => prom(e));
+    listaPromedios.sort((a, b) => b.promedio - a.promedio);
+    return listaPromedios[0]; 
+}
+
+
+//imprimir promedio
 const promedio = estudiantes.lista(prom)
+console.log("\nPROMEDIO DE ESTUDIANTES\n")
 console.log(promedio)
+
+//imprimir mejores estudiantes
+const mejores = estudiantes.lista(mejor)
+console.log("\nMEJORES ESTUDIANTES\n")
+console.log(mejores)
+
+//imprimir estudiantes empezando del mas joven
+const edad = nacimiento()
+console.log("\nESTUDIANTES ORDENADOS DEL MAS JOVEN AL MAS VIEJO\n")
+console.log(edad)
+
+//imprimir mejor calificacion
+const altos = estudiantes.lista(alto)
+console.log("\nCALIFICACION MAS ALTA\n")
+console.log(altos)
