@@ -53,7 +53,9 @@ class Login{
 
 const login_1 = new Login(1,'victorCasta', 'Victor', 'victorcasta@gmail.com')
 console.log(login_1.getUsers())
-const login_2 = new Login()
+const login_2 = new Login(2,'rhrhr')
 console.log(login_2.getUsers())
 login_2.clearUsers()
 console.log(login_2.getUsers())
+const login_3 = new Login(3,'rhrhr')
+console.log(login_3.getUsers())
