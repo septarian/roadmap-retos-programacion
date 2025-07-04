@@ -70,7 +70,7 @@ function nacimiento(){
     return nacido
 }
 
-function alto(i){
+function alto(){
     const listaPromedios = estudiantes.map(e => prom(e));
     listaPromedios.sort((a, b) => b.promedio - a.promedio);
     return listaPromedios[0]; 
@@ -93,6 +93,6 @@ console.log("\nESTUDIANTES ORDENADOS DEL MAS JOVEN AL MAS VIEJO\n")
 console.log(edad)
 
 //imprimir mejor calificacion
-const altos = estudiantes.lista(alto)
+const altos = alto()
 console.log("\nCALIFICACION MAS ALTA\n")
 console.log(altos)
