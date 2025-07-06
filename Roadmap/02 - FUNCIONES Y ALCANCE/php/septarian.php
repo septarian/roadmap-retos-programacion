@@ -1,0 +1,3 @@
+<?php
+//funciones y alcance
+
